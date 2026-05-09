@@ -223,11 +223,11 @@ export default function AddAssetPage() {
           {/* 5. CUSTOM NAME */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-              Number Of Products
+              Number Of Assets
             </label>
             <input
               type="text"
-              placeholder="e.g., HR Dept Laptop"
+              placeholder="e.g., 5"
               value={assetName}
               onChange={(e) => setAssetName(e.target.value)}
               className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-4 focus:ring-[#e7000b]/15 focus:border-[#e7000b] transition-all"

@@ -69,7 +69,7 @@ export default function AssetTable({ data, role }) {
           }`}>
             {row.original.status}
           </div>
-          <div className="text-[11px] text-gray-500">Cond: {row.original.currentCondition || "Unknown"}</div>
+          <div className="text-[13px] text-gray-800">Cond: {row.original.currentCondition || "Unknown"}</div>
         </div>
       ),
     },

@@ -1,5 +1,13 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+admin@gmail.com
+admin@123
+
+superadmin@blue.com
+admin123
+
+Single Shared Workspace
+
 ## Getting Started
 
 First, run the development server:

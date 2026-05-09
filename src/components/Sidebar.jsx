@@ -87,7 +87,7 @@ export default function Sidebar({ role }) {
         </div>
       </div>
 
-      {/* Navigation Links */}
+    {/* Navigation Links */}
       <nav className="flex-1 py-6 space-y-2 overflow-y-auto custom-scrollbar overflow-x-hidden">
         <AnimatePresence>
           {!isCollapsed && (
@@ -101,11 +101,14 @@ export default function Sidebar({ role }) {
             </motion.p>
           )}
         </AnimatePresence>
-
+        
         <NavItem href="/admin" icon="📊" text="Dashboard" />
         <NavItem href="/admin/assets/list" icon="📋" text="View Inventory" />
+        
+        {/* Ab yeh "Add Asset" dono (Admin aur Super Admin) ko dikhega */}
+        <NavItem href="/admin/assets/add" icon="➕" text="Add Asset" />
 
-        {/* Super Admin Section */}
+        {/* Sirf Super Admin Section */}
         {role === "super-admin" && (
           <>
             <div className="pt-6 pb-2">
@@ -122,8 +125,7 @@ export default function Sidebar({ role }) {
                 )}
               </AnimatePresence>
             </div>
-
-            <NavItem href="/admin/assets/add" icon="➕" text="Add Asset" />
+            
             <NavItem href="/admin/users" icon="👑" text="Manage Users" />
           </>
         )}

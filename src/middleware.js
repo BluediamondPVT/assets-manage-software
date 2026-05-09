@@ -7,10 +7,10 @@ export default withAuth(
     const path = req.nextUrl.pathname;
 
     // EDGE LEVEL ROLE CHECK: 
-    // Yahan humne edit wale path ko bhi restrict kar diya hai
+    // Yahan se humne "/admin/assets/add" hata diya hai taaki Normal Admin bhi add kar sake.
+    // Lekin Edit aur Delete (users) abhi bhi lock hain.
     const isSuperAdminRoute = 
       path.startsWith("/admin/users") || 
-      path.startsWith("/admin/assets/add") ||
       path.startsWith("/admin/assets/edit");
 
     if (isSuperAdminRoute && token?.role !== "super-admin") {

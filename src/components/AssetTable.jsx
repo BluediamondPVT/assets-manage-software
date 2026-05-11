@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-table";
 import Link from "next/link";
 import DeleteAssetButton from "@/components/DeleteAssetButton";
-import { Search, ChevronDown, ArrowUpDown, SlidersHorizontal } from "lucide-react";
+import { Search, ChevronDown, ArrowUpDown, SlidersHorizontal, Package } from "lucide-react";
 
 export default function AssetTable({ data, role }) {
   const [sorting, setSorting] = useState([]);
@@ -20,29 +20,28 @@ export default function AssetTable({ data, role }) {
 
   // Table Columns Definition
   const columns = [
-    // 1. Naya Serial Number (S.No) Column 🔥
+    // 1. Serial Number (S.No)
     {
       id: "serialNumber",
       header: "S.No",
-      // row.index 0 se start hota hai, isliye + 1 kiya
       cell: ({ row }) => <span className="text-sm font-semibold text-gray-400">{row.index + 1}</span>,
-      enableSorting: false, // S.No ko sort karne ki zaroorat nahi
+      enableSorting: false,
     },
-    // 2. Asset ID
+    // 2. Batch ID (Godown Entry ID)
     {
       accessorKey: "assetId",
-      header: "Asset ID",
-      cell: ({ row }) => <span className="font-mono text-xs text-[#e7000b] font-bold">{row.getValue("assetId")}</span>, // Isko bhi thoda brand color de diya
+      header: "Batch ID",
+      cell: ({ row }) => <span className="font-mono text-xs text-[#e7000b] font-bold">{row.getValue("assetId")}</span>,
     },
-    // 3. Product Details
+    // 3. Product Details (Cleaned up for Bulk Stock)
     {
       id: "productDetails",
-      accessorFn: (row) => `${row.assetName} ${row.category} ${row.product}`,
+      accessorFn: (row) => `${row.type} ${row.category} ${row.product}`,
       header: "Product Details",
       cell: ({ row }) => (
         <div>
-          <div className="font-medium text-gray-800">{row.original.assetName}</div>
-          <div className="text-[11px] text-gray-500">{row.original.category} &gt; {row.original.product}</div>
+          <div className="font-bold text-gray-800">{row.original.product}</div>
+          <div className="text-[11px] text-gray-500 font-medium">{row.original.type} &gt; {row.original.category}</div>
         </div>
       ),
     },
@@ -56,24 +55,20 @@ export default function AssetTable({ data, role }) {
         </span>
       ),
     },
-    // 5. Status & Condition
+    // 5. NAYA COLUMN 🔥: STOCK / QUANTITY
     {
-      id: "status",
-      accessorFn: (row) => `${row.status} ${row.currentCondition}`,
-      header: "Status & Cond.",
+      accessorKey: "quantity",
+      header: "Total Stock",
       cell: ({ row }) => (
-        <div>
-          <div className={`inline-block px-2 py-1 text-[11px] font-bold rounded-full mb-1 ${
-            row.original.status === "Available" ? "bg-green-100 text-green-700" :
-            row.original.status === "Assigned" ? "bg-blue-100 text-blue-700" : "bg-red-100 text-red-700"
-          }`}>
-            {row.original.status}
-          </div>
-          <div className="text-[13px] text-gray-800">Cond: {row.original.currentCondition || "Unknown"}</div>
+        <div className="flex items-center gap-2">
+          <span className="bg-gray-100 border border-gray-200 text-gray-800 px-3 py-1 rounded-md text-sm font-bold flex items-center gap-1.5 shadow-sm">
+            <Package className="w-3.5 h-3.5 text-gray-500" />
+            {row.getValue("quantity")}
+          </span>
         </div>
       ),
     },
-    // 6. Actions Column (Sirf super-admin ke liye)
+    // 6. Actions Column
     ...(role === "super-admin"
       ? [
           {
@@ -83,7 +78,7 @@ export default function AssetTable({ data, role }) {
             cell: ({ row }) => (
               <div className="flex justify-end gap-2 items-center">
                 <Link href={`/admin/assets/edit/${row.original.id}`} className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded transition">
-                  Edit
+                  Edit Stock
                 </Link>
                 <DeleteAssetButton assetId={row.original.id} />
               </div>
@@ -122,7 +117,7 @@ export default function AssetTable({ data, role }) {
           <input
             value={globalFilter ?? ""}
             onChange={(e) => setGlobalFilter(e.target.value)}
-            placeholder="Search all columns..."
+            placeholder="Search products, companies..."
             className="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-lg outline-none focus:border-[#e7000b] focus:ring-1 focus:ring-[#e7000b] transition-all"
           />
         </div>
@@ -197,7 +192,7 @@ export default function AssetTable({ data, role }) {
             ) : (
               <tr>
                 <td colSpan={columns.length} className="p-8 text-center text-gray-500">
-                  No assets found matching your search.
+                  No assets found in inventory. Add some to get started.
                 </td>
               </tr>
             )}
@@ -208,7 +203,7 @@ export default function AssetTable({ data, role }) {
       {/* Pagination Footer */}
       <div className="p-4 border-t border-gray-100 flex items-center justify-between bg-gray-50/30">
         <span className="text-sm text-gray-600">
-          Showing {table.getRowModel().rows.length} of {data.length} entries
+          Showing {table.getRowModel().rows.length} of {data.length} unique batches
         </span>
         <div className="flex gap-2">
           <button

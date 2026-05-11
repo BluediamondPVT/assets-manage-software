@@ -38,6 +38,5 @@ export async function createNewUser(formData) {
   const newUser = new User({ name, email, password: hashedPassword, role });
   await newUser.save();
 
-  // Bina page refresh kiye UI update karne ka magic trick!
   revalidatePath("/admin/users"); 
 }

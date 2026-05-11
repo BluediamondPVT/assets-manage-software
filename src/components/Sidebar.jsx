@@ -105,10 +105,12 @@ export default function Sidebar({ role }) {
         <NavItem href="/admin" icon="📊" text="Dashboard" />
         <NavItem href="/admin/assets/list" icon="📋" text="View Inventory" />
         
+        <NavItem href="/admin/assign/list" icon="📋" text="See Assignments" />
         {/* Ab yeh "Add Asset" dono (Admin aur Super Admin) ko dikhega */}
         <NavItem href="/admin/assets/add" icon="➕" text="Add Asset" />
 
         <NavItem href="/admin/assign/add" icon="+" text="Assign Asset" />
+
 
         {/* Sirf Super Admin Section */}
         {role === "super-admin" && (
@@ -128,7 +130,7 @@ export default function Sidebar({ role }) {
               </AnimatePresence>
             </div>
             
-            <NavItem href="/admin/users" icon="👑" text="Manage Users" />
+            <NavItem href="/admin/users"  text="Manage Users" />
           </>
         )}
       </nav>

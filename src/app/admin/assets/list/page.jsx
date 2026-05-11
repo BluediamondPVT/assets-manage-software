@@ -1,20 +1,42 @@
 import { getAssets, getDashboardStats } from "@/actions/assetActions";
 import AssetTable from "@/components/AssetTable";
+import Link from "next/link"; // 🔥 Link import kiya
 
 export default async function AssetListPage() {
   const assets = await getAssets();
   const stats = await getDashboardStats();
 
+  // NAYA: filterKey add ki hai taaki URL me sahi naam jaye
   const magicBoxes = [
-    { label: "Laptop", data: stats.Laptops, icon: "💻" },
-    { label: "Desktop", data: stats.Desktops, icon: "🖥️" },
-    { label: "CPU", data: stats.CPU, icon: "🖧" },
-    { label: "Mouse", data: stats.Mouse, icon: "🖱️" },
-    { label: "Mobile", data: stats["Mobile Phones"], icon: "📱" },
-    { label: "Charger", data: stats.Chargers, icon: "🔌" },
-    { label: "Printer", data: stats.Printer, icon: "🖨️" },
-    { label: "CCTV", data: stats["Camera / CCTV"], icon: "📹" },
-    { label: "Chair", data: stats.Chairs, icon: "🪑" },
+    { label: "Laptop", filterKey: "Laptops", data: stats.Laptops, icon: "💻" },
+    {
+      label: "Desktop",
+      filterKey: "Desktops",
+      data: stats.Desktops,
+      icon: "🖥️",
+    },
+    { label: "CPU", filterKey: "CPU", data: stats.CPU, icon: "🖧" },
+    { label: "Mouse", filterKey: "Mouse", data: stats.Mouse, icon: "🖱️" },
+    {
+      label: "Mobile",
+      filterKey: "Mobile Phones",
+      data: stats["Mobile Phones"],
+      icon: "📱",
+    },
+    {
+      label: "Charger",
+      filterKey: "Charger",
+      data: stats.Chargers,
+      icon: "🔌",
+    },
+    { label: "Printer", filterKey: "Printer", data: stats.Printer, icon: "🖨️" },
+    {
+      label: "CCTV",
+      filterKey: "Camera / CCTV",
+      data: stats["Camera / CCTV"],
+      icon: "📹",
+    },
+    { label: "Chair", filterKey: "Chairs", data: stats.Chairs, icon: "🪑" },
   ];
 
   return (
@@ -25,7 +47,8 @@ export default async function AssetListPage() {
             Master Inventory
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            Live stock and assignment overview.
+            Live stock and assignment overview. Click any box to view assigned
+            items.
           </p>
         </div>
       </div>
@@ -33,9 +56,11 @@ export default async function AssetListPage() {
       {/* MAGIC BOX SECTION 🔥 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {magicBoxes.map((box, index) => (
-          <div
+          // YAHAN DIV KO LINK MEIN BADAL DIYA HAI
+          <Link
+            href={`/admin/assign/list?filter=${encodeURIComponent(box.filterKey)}`}
             key={index}
-            className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all group"
+            className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-[#e7000b]/30 transition-all group block cursor-pointer"
           >
             <div className="flex items-center gap-4 mb-3">
               <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-2xl group-hover:bg-[#e7000b]/10 transition-colors">
@@ -73,7 +98,7 @@ export default async function AssetListPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 

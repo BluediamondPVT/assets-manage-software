@@ -1,4 +1,4 @@
-"use server"; // 🔥 YEH LINE SABSE ZAROORI HAI
+"use server"; 
 
 import { connectToDatabase } from "@/lib/db";
 import Asset from "@/models/Asset";

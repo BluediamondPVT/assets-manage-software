@@ -2,6 +2,7 @@
 
 import { connectToDatabase } from "@/lib/db";
 import Asset from "@/models/Asset";
+import Assignment from "@/models/Assignment";
 
 // 1. LIST PAGE KE LIYE
 export const getAssets = async () => {
@@ -27,5 +28,51 @@ export const getAssetById = async (id) => {
     return plainAsset;
   } catch (error) {
     return null;
+  }
+};
+
+
+// 🌟 DASHBOARD MAGIC STATS
+export const getDashboardStats = async () => {
+  try {
+    await connectToDatabase();
+
+    // 1. Godown se saara stock uthao
+    const assets = await Asset.find({}).lean();
+    
+    // 2. Active Assignments uthao (Jo abhi employees ke paas hain)
+    const activeAssignments = await Assignment.find({ status: "Assigned" }).lean();
+
+    const stats = {
+      Laptops: { stock: 0, issued: 0 },
+      Desktops: { stock: 0, issued: 0 },
+      CPU: { stock: 0, issued: 0 },
+      Mouse: { stock: 0, issued: 0 },
+      "Mobile Phones": { stock: 0, issued: 0 },
+      Chargers: { stock: 0, issued: 0 },
+      Printer: { stock: 0, issued: 0 },
+      "Camera / CCTV": { stock: 0, issued: 0 },
+      Chairs: { stock: 0, issued: 0 },
+    };
+
+    // Godown Stock Count Karo
+    assets.forEach(a => {
+      const p = a.product;
+      const q = a.quantity || 0;
+      if (stats[p]) stats[p].stock += q;
+      else if (p === "Laptop Chargers" || p === "Mobile Chargers") stats.Chargers.stock += q;
+    });
+
+    // Issued Count Karo (Assignments se)
+    activeAssignments.forEach(asgn => {
+      const p = asgn.product;
+      if (stats[p]) stats[p].issued += 1;
+      else if (p === "Laptop Chargers" || p === "Mobile Chargers") stats.Chargers.issued += 1;
+    });
+
+    return JSON.parse(JSON.stringify(stats));
+  } catch (error) {
+    console.error("Stats Error:", error);
+    return {};
   }
 };

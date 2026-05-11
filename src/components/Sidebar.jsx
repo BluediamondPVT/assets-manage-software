@@ -108,6 +108,8 @@ export default function Sidebar({ role }) {
         {/* Ab yeh "Add Asset" dono (Admin aur Super Admin) ko dikhega */}
         <NavItem href="/admin/assets/add" icon="➕" text="Add Asset" />
 
+        <NavItem href="/admin/assign/add" icon="+" text="Assign Asset" />
+
         {/* Sirf Super Admin Section */}
         {role === "super-admin" && (
           <>

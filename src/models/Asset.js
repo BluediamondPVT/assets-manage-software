@@ -8,11 +8,11 @@ const assetSchema = new mongoose.Schema(
     category: { type: String, required: true },
     product: { type: String, required: true },
     
-    // 2. COMPANY / BRANCH
+    // 2. COMPANY / BRANCH 
     company: { 
       type: String, 
       required: true,
-      enum: ["Bluediamond Infotech PVT LTD", "Trivesa HR Consultancy", "BDIT Institute"] 
+      enum: ["Bluediamond Infotech PVT LTD", "Trivesa HR Consultancy", "BDIT Institute","Inventory Management"] // Predefined companies
     },
     
     // 3. STOCK / QUANTITY (Naya King 👑)

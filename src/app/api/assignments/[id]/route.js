@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import Assignment from "@/models/Assignment";
-import Asset from "@/models/Asset"; // Godown me plus karne ke liye
+import Asset from "@/models/Asset"; // Inventory me plus karne ke liye
 
 export async function PUT(req, { params }) {
   try {
@@ -33,11 +33,11 @@ export async function PUT(req, { params }) {
 
     await assignment.save();
 
-    // 3. Godown (Asset) mein wapas +1 (Plus) kar do! 🔥
-    const assetInGodown = await Asset.findById(assignment.assetRef);
-    if (assetInGodown) {
-      assetInGodown.quantity += 1;
-      await assetInGodown.save();
+    // 3. Inventory (Asset) mein wapas +1 (Plus) kar do! 🔥
+    const assetInInventory = await Asset.findById(assignment.assetRef);
+    if (assetInInventory) {
+      assetInInventory.quantity += 1;
+      await assetInInventory.save();
     }
 
     return NextResponse.json(

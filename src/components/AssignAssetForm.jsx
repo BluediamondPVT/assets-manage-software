@@ -13,21 +13,21 @@ export default function AssignAssetForm() {
   const [employeeName, setEmployeeName] = useState("");
   const [personalNumber, setPersonalNumber] = useState("");
   const [department, setDepartment] = useState("");
-  const [selectedAssetRef, setSelectedAssetRef] = useState(""); // Godown item ki _id
-  const [assignedDate, setAssignedDate] = useState(new Date().toISOString().split('T')[0]); // Default aaj ki date
+  const [company, setCompany] = useState(""); // 🔥 NAYA STATE COMPANY KE LIYE
+  const [selectedAssetRef, setSelectedAssetRef] = useState(""); 
+  const [assignedDate, setAssignedDate] = useState(new Date().toISOString().split('T')[0]); 
   const [condition, setCondition] = useState("New");
   const [remark, setRemark] = useState("");
 
   const [statusMsg, setStatusMsg] = useState({ type: "", text: "" });
   const [isLoading, setIsLoading] = useState(false);
 
-  // Jab page load ho, Godown se items utha lo
+  // Jab page load ho, Inventory se items utha lo
   useEffect(() => {
     const fetchAssets = async () => {
       try {
         const response = await axios.get("/api/assets");
         if (response.data.success) {
-          // Sirf wahi item dikhao jinki quantity 0 se zyada hai (In Stock)
           const inStockAssets = response.data.data.filter(asset => asset.quantity > 0);
           setAvailableAssets(inStockAssets);
         }
@@ -43,7 +43,6 @@ export default function AssignAssetForm() {
     setIsLoading(true);
     setStatusMsg({ type: "", text: "" });
 
-    // Selected asset me se category aur product nikalna (Schema ke hisaab se)
     const assetDetails = availableAssets.find(a => a._id === selectedAssetRef);
 
     if (!assetDetails) {
@@ -57,6 +56,7 @@ export default function AssignAssetForm() {
         employeeName,
         personalNumber,
         department,
+        company, // 🔥 PAYLOAD MEIN COMPANY BHEJ RAHE HAIN
         assetRef: selectedAssetRef,
         category: assetDetails.category,
         product: assetDetails.product,
@@ -68,17 +68,17 @@ export default function AssignAssetForm() {
       if (response.data.success) {
         setStatusMsg({ type: "success", text: "✅ " + response.data.message });
         
-        // Form reset kar do
+        // Form reset
         setEmployeeName("");
         setPersonalNumber("");
         setDepartment("");
+        setCompany(""); // 🔥 Naya state reset
         setSelectedAssetRef("");
         setCondition("New");
         setRemark("");
         
-        // Stock refresh karne ke liye wapas api call kar sakte ho ya page refresh kar do
         setTimeout(() => {
-          router.push("/admin/assign/list"); // Yeh naya page hoga assigned list ka
+          router.push("/admin/assign/list"); 
           router.refresh();
         }, 1500);
       }
@@ -103,8 +103,9 @@ export default function AssignAssetForm() {
         
         {/* SECTION 1: EMPLOYEE DETAILS */}
         <div>
-          <h3 className="text-lg font-bold text-gray-800 border-b pb-2 mb-4">1. Employee Details</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <h3 className="text-lg font-bold text-gray-800 border-b pb-2 mb-4">1. Employee Details & Branch</h3>
+          {/* Grid ko 4 items ke liye 2 columns me set kiya */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">Employee Name</label>
               <input type="text" placeholder="e.g., Rahul Sharma" value={employeeName} onChange={(e) => setEmployeeName(e.target.value)} className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-4 focus:ring-[#e7000b]/15 focus:border-[#e7000b]" required />
@@ -115,13 +116,24 @@ export default function AssignAssetForm() {
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">Department</label>
-              <select value={department} onChange={(e) => setDepartment(e.target.value)} className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-4 focus:ring-[#e7000b]/15 focus:border-[#e7000b] bg-white" required>
+              <select value={department} onChange={(e) => setDepartment(e.target.value)} className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-4 focus:ring-[#e7000b]/15 focus:border-[#e7000b] bg-white cursor-pointer" required>
                 <option value="" disabled>Select Department</option>
                 <option value="IT">IT</option>
                 <option value="HR">HR</option>
                 <option value="Sales">Sales</option>
                 <option value="Marketing">Marketing</option>
                 <option value="Operations">Operations</option>
+              </select>
+            </div>
+            {/* 🔥 NAYA COMPANY DROPDOWN */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Company / Branch</label>
+              <select value={company} onChange={(e) => setCompany(e.target.value)} className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-4 focus:ring-[#e7000b]/15 focus:border-[#e7000b] bg-white cursor-pointer" required>
+                <option value="" disabled>Select Company</option>
+                <option value="Bluediamond Infotech PVT LTD">Bluediamond Infotech PVT LTD</option>
+                <option value="Trivesa HR Consultancy">Trivesa HR Consultancy</option>
+                <option value="BDIT Institute">BDIT Institute</option>
+                <option value="Inventory Management">Inventory Management</option>
               </select>
             </div>
           </div>
@@ -132,10 +144,10 @@ export default function AssignAssetForm() {
           <h3 className="text-lg font-bold text-gray-800 border-b pb-2 mb-4">2. Select Asset from Inventory</h3>
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">Available Asset (In Stock)</label>
-            <select value={selectedAssetRef} onChange={(e) => setSelectedAssetRef(e.target.value)} className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-4 focus:ring-[#e7000b]/15 focus:border-[#e7000b] bg-white" required>
+            <select value={selectedAssetRef} onChange={(e) => setSelectedAssetRef(e.target.value)} className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-4 focus:ring-[#e7000b]/15 focus:border-[#e7000b] bg-white cursor-pointer" required>
               <option value="" disabled>-- Select an Asset --</option>
               {availableAssets.length === 0 ? (
-                <option disabled>Loading or No assets available in Godown...</option>
+                <option disabled>Loading or No assets available in Inventory...</option>
               ) : (
                 availableAssets.map((asset) => (
                   <option key={asset._id} value={asset._id}>
@@ -144,7 +156,7 @@ export default function AssignAssetForm() {
                 ))
               )}
             </select>
-           <p className="text-xs text-gray-500 mt-2">Note: Only assets with Quantity {">"} 0 are shown here.</p>
+            <p className="text-xs text-gray-500 mt-2">Note: Only assets with Quantity {">"} 0 are shown here.</p>
           </div>
         </div>
 
@@ -154,11 +166,11 @@ export default function AssignAssetForm() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">Assigned Date</label>
-              <input type="date" value={assignedDate} onChange={(e) => setAssignedDate(e.target.value)} className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-4 focus:ring-[#e7000b]/15 focus:border-[#e7000b]" required />
+              <input type="date" value={assignedDate} onChange={(e) => setAssignedDate(e.target.value)} className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-4 focus:ring-[#e7000b]/15 focus:border-[#e7000b] cursor-pointer" required />
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">Condition at Assignment</label>
-              <select value={condition} onChange={(e) => setCondition(e.target.value)} className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-4 focus:ring-[#e7000b]/15 focus:border-[#e7000b] bg-white" required>
+              <select value={condition} onChange={(e) => setCondition(e.target.value)} className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-4 focus:ring-[#e7000b]/15 focus:border-[#e7000b] bg-white cursor-pointer" required>
                 <option value="New">New</option>
                 <option value="Good">Good</option>
                 <option value="Fair">Fair</option>
@@ -175,7 +187,7 @@ export default function AssignAssetForm() {
         <button
           type="submit"
           disabled={isLoading || availableAssets.length === 0}
-          className="w-full bg-[#e7000b] text-white font-semibold py-4 rounded-lg hover:bg-[#cc000a] transition-all shadow-md hover:shadow-lg active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed mt-2 text-lg"
+          className="w-full cursor-pointer bg-[#e7000b] text-white font-semibold py-4 rounded-lg hover:bg-[#cc000a] transition-all shadow-md hover:shadow-lg active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed mt-2 text-lg"
         >
           {isLoading ? "Assigning & Updating Stock..." : "Confirm Assignment"}
         </button>

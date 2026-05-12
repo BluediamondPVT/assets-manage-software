@@ -21,7 +21,7 @@ export default function AssignmentTable({ data }) {
   // RETURN ASSET FUNCTION 🔥
   const handleReturnAsset = async (assignmentId) => {
     const confirmReturn = window.confirm(
-      "Are you sure you want to mark this asset as RETURNED? (Godown stock will increase by 1)",
+      "Are you sure you want to mark this asset as RETURNED? (Inventory stock will increase by 1)",
     );
     if (!confirmReturn) return;
 
@@ -128,7 +128,7 @@ export default function AssignmentTable({ data }) {
               <button
                 onClick={() => handleReturnAsset(row.original._id)}
                 disabled={isReturning === row.original._id}
-                className="px-3 py-1.5 bg-[#e7000b]/10 text-[#e7000b] hover:bg-[#e7000b] hover:text-white text-xs font-bold rounded transition-all disabled:opacity-50"
+                className="px-3 py-1.5 cursor-pointer bg-[#e7000b]/10 text-[#e7000b] hover:bg-[#e7000b] hover:text-white text-xs font-bold rounded transition-all disabled:opacity-50"
               >
                 {isReturning === row.original._id
                   ? "Processing..."
@@ -187,7 +187,7 @@ export default function AssignmentTable({ data }) {
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="p-4 font-semibold text-gray-700 text-sm"
+                    className="p-4  font-semibold text-gray-700 text-sm"
                   >
                     {flexRender(
                       header.column.columnDef.header,

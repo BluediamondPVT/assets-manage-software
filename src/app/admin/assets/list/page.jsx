@@ -17,12 +17,8 @@ export default async function AssetListPage() {
     },
     { label: "CPU", filterKey: "CPU", data: stats.CPU, icon: "🖧" },
     { label: "Mouse", filterKey: "Mouse", data: stats.Mouse, icon: "🖱️" },
-    {
-      label: "Mobile",
-      filterKey: "Mobile Phones",
-      data: stats["Mobile Phones"],
-      icon: "📱",
-    },
+    { label: "Keyboard", filterKey: "Keyboard", data: stats.Keyboard, icon: "⌨️" },
+  
     {
       label: "Charger",
       filterKey: "Charger",
@@ -37,6 +33,12 @@ export default async function AssetListPage() {
       icon: "📹",
     },
     { label: "Chair", filterKey: "Chairs", data: stats.Chairs, icon: "🪑" },
+      {
+      label: "Mobile",
+      filterKey: "Mobile Phones",
+      data: stats["Mobile Phones"],
+      icon: "📱",
+    },
   ];
 
   return (
@@ -79,11 +81,11 @@ export default async function AssetListPage() {
               </div>
             </div>
 
-            {/* Split view: Godown vs Issued */}
+            {/* Split view: Inventory vs Issued */}
             <div className="grid grid-cols-2 gap-2 pt-3 border-t border-gray-50">
               <div className="text-center">
                 <div className="text-[10px] font-bold text-blue-500 uppercase">
-                  Godown
+                  Inventory
                 </div>
                 <div className="text-sm font-bold text-gray-700">
                   {box.data?.stock || 0}

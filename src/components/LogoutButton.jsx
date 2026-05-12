@@ -6,7 +6,7 @@ export default function LogoutButton({ isCollapsed }) {
     <button
       onClick={() => signOut({ callbackUrl: "/login" })}
       title="Secure Logout"
-      className={`flex items-center justify-center gap-2 bg-red-500/10 text-red-500 rounded-lg hover:bg-[#e7000b] hover:text-white transition-all font-semibold group ${
+      className={`flex items-center cursor-pointer justify-center gap-2 bg-red-500/10 text-red-500 rounded-lg hover:bg-[#e7000b] hover:text-white transition-all font-semibold group ${
         isCollapsed ? "w-10 h-10 p-0" : "w-full py-2.5"
       }`}
     >

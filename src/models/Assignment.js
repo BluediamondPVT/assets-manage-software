@@ -7,8 +7,15 @@ const assignmentSchema = new mongoose.Schema(
     personalNumber: { type: String, required: true }, // Emp ID ya Phone Number
     department: { type: String, required: true },
 
+    //1.5 COMPANY / BRANCH (Jahan se assign kar rahe hain)
+    company:{
+      type:String,
+      required:true,
+      enum: ["Bluediamond Infotech PVT LTD", "Trivesa HR Consultancy", "BDIT Institute","Inventory Management"] // Predefined companies
+    },
+
     // 2. ASSET DETAILS (Kya assign kiya?)
-    // assetRef: Godown (Asset collection) ke original item ka link taaki quantity minus/plus kar sakein
+    // assetRef: Inventory (Asset collection) ke original item ka link taaki quantity minus/plus kar sakein
     assetRef: { type: mongoose.Schema.Types.ObjectId, ref: "Asset", required: true }, 
     category: { type: String, required: true },
     product: { type: String, required: true },

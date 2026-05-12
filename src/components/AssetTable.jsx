@@ -38,7 +38,7 @@ export default function AssetTable({ data, role }) {
       ),
       enableSorting: false,
     },
-    // 2. Batch ID (Godown Entry ID)
+    // 2. Batch ID (Inventory Entry ID)
     {
       accessorKey: "assetId",
       header: "Batch ID",
@@ -152,7 +152,7 @@ export default function AssetTable({ data, role }) {
         <div className="relative">
           <button
             onClick={() => setIsColumnDropdownOpen(!isColumnDropdownOpen)}
-            className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 font-medium transition-all"
+            className="flex items-center gap-2 px-4 py-2 text-sm cursor-pointer border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 font-medium transition-all"
           >
             <SlidersHorizontal className="h-4 w-4" />
             Columns
@@ -239,7 +239,7 @@ export default function AssetTable({ data, role }) {
               <tr>
                 <td
                   colSpan={columns.length}
-                  className="p-8 text-center text-gray-500"
+                  className="p-8 text-center  text-gray-500"
                 >
                   No assets found in inventory. Add some to get started.
                 </td>

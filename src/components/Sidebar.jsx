@@ -46,10 +46,11 @@ export default function Sidebar({ role }) {
       {/* Collapse Toggle Button */}
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute -right-3.5 top-8 bg-[#e7000b] border-[3px] border-[#f8f9fa] text-white w-7 h-7 rounded-full flex items-center justify-center shadow-md hover:bg-[#cc000a] hover:scale-110 transition-all z-50 outline-none"
+        className="absolute  -right-3.5 top-8 bg-[#e7000b] border-[3px] border-[#f8f9fa] text-white w-7 h-7 rounded-full flex items-center justify-center shadow-md hover:bg-[#cc000a] hover:scale-110 transition-all z-50 outline-none"
       >
         <motion.div animate={{ rotate: isCollapsed ? 180 : 0 }}>
           <svg
+          className="cursor-pointer"
             width="14"
             height="14"
             viewBox="0 0 24 24"

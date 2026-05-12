@@ -81,7 +81,7 @@ export default async function UsersPage() {
             
             <button 
               type="submit" 
-              className="w-full bg-[#e7000b] text-white font-semibold py-3.5 rounded-lg hover:bg-[#cc000a] transition-all shadow-md hover:shadow-lg active:scale-[0.99] mt-2"
+              className="w-full cursor-pointer bg-[#e7000b] text-white font-semibold py-3.5 rounded-lg hover:bg-[#cc000a] transition-all shadow-md hover:shadow-lg active:scale-[0.99] mt-2"
             >
               Create User Account
             </button>

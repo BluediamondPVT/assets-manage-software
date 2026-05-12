@@ -1,4 +1,4 @@
-"use server"; 
+"use server";
 
 import { connectToDatabase } from "@/lib/db";
 import Asset from "@/models/Asset";
@@ -31,16 +31,15 @@ export const getAssetById = async (id) => {
   }
 };
 
-
-// 🌟 DASHBOARD MAGIC STATS
+// 3. DASHBOARD MAGIC STATS 🔥
 export const getDashboardStats = async () => {
   try {
     await connectToDatabase();
 
-    // 1. Godown se saara stock uthao
+    // Godown se saara stock uthao
     const assets = await Asset.find({}).lean();
     
-    // 2. Active Assignments uthao (Jo abhi employees ke paas hain)
+    // Active Assignments uthao (Jo abhi employees ke paas hain)
     const activeAssignments = await Assignment.find({ status: "Assigned" }).lean();
 
     const stats = {
@@ -48,6 +47,7 @@ export const getDashboardStats = async () => {
       Desktops: { stock: 0, issued: 0 },
       CPU: { stock: 0, issued: 0 },
       Mouse: { stock: 0, issued: 0 },
+      Keyboard: { stock: 0, issued: 0 }, // 🔥 Keyboard Added
       "Mobile Phones": { stock: 0, issued: 0 },
       Chargers: { stock: 0, issued: 0 },
       Printer: { stock: 0, issued: 0 },
@@ -55,7 +55,7 @@ export const getDashboardStats = async () => {
       Chairs: { stock: 0, issued: 0 },
     };
 
-    // Godown Stock Count Karo
+    // Godown Stock Count
     assets.forEach(a => {
       const p = a.product;
       const q = a.quantity || 0;
@@ -63,7 +63,7 @@ export const getDashboardStats = async () => {
       else if (p === "Laptop Chargers" || p === "Mobile Chargers") stats.Chargers.stock += q;
     });
 
-    // Issued Count Karo (Assignments se)
+    // Issued Count
     activeAssignments.forEach(asgn => {
       const p = asgn.product;
       if (stats[p]) stats[p].issued += 1;

@@ -32,7 +32,7 @@ export default function DeleteAssetButton({ assetId }) {
     <button
       onClick={handleDelete}
       disabled={isDeleting}
-      className="px-3 py-1.5 bg-red-50 text-[#e7000b] hover:bg-red-100 text-xs font-medium rounded transition disabled:opacity-50"
+      className="px-3 py-1.5 cursor-pointer bg-red-50 text-[#e7000b] hover:bg-red-100 text-xs font-medium rounded transition disabled:opacity-50"
     >
       {isDeleting ? "Deleting..." : "Delete"}
     </button>

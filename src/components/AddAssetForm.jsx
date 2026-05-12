@@ -96,6 +96,7 @@ export default function AddAssetForm() {
             <option value="Bluediamond Infotech PVT LTD">Bluediamond Infotech PVT LTD</option>
             <option value="Trivesa HR Consultancy">Trivesa HR Consultancy</option>
             <option value="BDIT Institute">BDIT Institute</option>
+            <option value="Inventory Management">Inventory Management</option>
           </select>
         </div>
 
@@ -144,7 +145,7 @@ export default function AddAssetForm() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-[#e7000b] text-white font-semibold py-3.5 rounded-lg hover:bg-[#cc000a] transition-all shadow-md hover:shadow-lg active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed mt-4"
+          className="w-full cursor-pointer bg-[#e7000b] text-white font-semibold py-3.5 rounded-lg hover:bg-[#cc000a] transition-all shadow-md hover:shadow-lg active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed mt-4"
         >
           {isLoading ? "Saving Inventory..." : "Save to Inventory"}
         </button>

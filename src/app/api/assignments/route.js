@@ -1,16 +1,14 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import Assignment from "@/models/Assignment";
-import Asset from "@/models/Asset"; // Godown ka data update karne ke liye
+import Asset from "@/models/Asset"; 
 
-// 1. GET ALL ASSIGNMENTS (Table mein dikhane ke liye)
+// 1. GET ALL ASSIGNMENTS
 export async function GET() {
   try {
     await connectToDatabase();
-    
-    // Saari history nikalenge latest pehle
     const assignments = await Assignment.find({})
-      .populate("assetRef", "assetId") // Asset ID bhi sath me laayenge
+      .populate("assetRef", "assetId") 
       .sort({ createdAt: -1 });
       
     return NextResponse.json({ success: true, data: assignments }, { status: 200 });
@@ -20,7 +18,7 @@ export async function GET() {
   }
 }
 
-// 2. ASSIGN ASSET TO EMPLOYEE (The Magic Function 🔥)
+// 2. ASSIGN ASSET TO EMPLOYEE
 export async function POST(req) {
   try {
     await connectToDatabase();
@@ -30,7 +28,8 @@ export async function POST(req) {
       employeeName, 
       personalNumber, 
       department, 
-      assetRef, // Yeh Godown wale asset ki MongoDB ID hai
+      company, // 🔥 NAYA FIELD EXTRACT KIYA
+      assetRef, 
       category, 
       product, 
       assignedDate, 
@@ -38,7 +37,7 @@ export async function POST(req) {
       remark 
     } = body;
 
-    // STEP 1: Pehle check karo ki Godown mein wo item bacha hai ya nahi?
+    // STEP 1: Check in Godown
     const assetInGodown = await Asset.findById(assetRef);
     
     if (!assetInGodown) {
@@ -49,11 +48,12 @@ export async function POST(req) {
       return NextResponse.json({ success: false, error: "Out of Stock! Ye item godown mein nahi bacha." }, { status: 400 });
     }
 
-    // STEP 2: Nayi Assignment Entry Banao
+    // STEP 2: Create Assignment
     const newAssignment = new Assignment({
       employeeName,
       personalNumber,
       department,
+      company, // 🔥 YAHAN DB ME SAVE KAR DIYA
       assetRef,
       category,
       product,
@@ -64,7 +64,7 @@ export async function POST(req) {
 
     await newAssignment.save();
 
-    // STEP 3: Godown se 1 item minus (-) kar do!
+    // STEP 3: Deduct from Godown
     assetInGodown.quantity -= 1;
     await assetInGodown.save();
 

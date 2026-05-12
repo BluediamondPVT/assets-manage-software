@@ -13,7 +13,7 @@ export default function AssignAssetPage() {
           Assign Asset to Employee
         </h1>
         <p className="text-sm text-gray-500 mt-1">
-          Select an available item from the inventory and assign it to a staff member. Godown stock will update automatically.
+          Select an available item from the inventory and assign it to a staff member. Inventory stock will update automatically.
         </p>
       </div>
 

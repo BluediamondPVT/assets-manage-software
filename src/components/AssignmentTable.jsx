@@ -10,7 +10,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Search, Package, User } from "lucide-react";
+import { Search, Package, User, Building2 } from "lucide-react"; // 🔥 Building2 icon import kiya
 
 export default function AssignmentTable({ data }) {
   const router = useRouter();
@@ -28,14 +28,13 @@ export default function AssignmentTable({ data }) {
     setIsReturning(assignmentId);
 
     try {
-      // API call jo abhi humne banayi
       const response = await axios.put(`/api/assignments/${assignmentId}`, {
         returnRemark: "Returned manually by Admin",
       });
 
       if (response.data.success) {
         alert("✅ Asset Returned Successfully!");
-        router.refresh(); // Page refresh to get new stock & status
+        router.refresh();
       }
     } catch (error) {
       alert(
@@ -73,6 +72,21 @@ export default function AssignmentTable({ data }) {
               {row.original.department} | {row.original.personalNumber}
             </div>
           </div>
+        </div>
+      ),
+    },
+    // NAYA COLUMN: COMPANY / BRANCH 🔥
+    {
+      accessorKey: "company",
+      header: "Company / Branch",
+      cell: ({ row }) => (
+        <div className="flex items-center gap-1.5">
+          <Building2 className="w-3.5 h-3.5 text-gray-400" />
+          <span className="text-sm font-medium text-gray-700">
+            {row.original.company || (
+              <span className="text-gray-400 italic">N/A</span>
+            )}
+          </span>
         </div>
       ),
     },
@@ -115,7 +129,6 @@ export default function AssignmentTable({ data }) {
         </span>
       ),
     },
-    // NAYA COLUMN: ACTIONS 🔥
     {
       id: "actions",
       header: () => <div className="text-right">Action</div>,
@@ -169,7 +182,7 @@ export default function AssignmentTable({ data }) {
           <input
             value={globalFilter ?? ""}
             onChange={(e) => setGlobalFilter(e.target.value)}
-            placeholder="Search employee or asset..."
+            placeholder="Search employee, asset or company..."
             className="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-[#e7000b] focus:border-[#e7000b]"
           />
         </div>
@@ -187,7 +200,7 @@ export default function AssignmentTable({ data }) {
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="p-4  font-semibold text-gray-700 text-sm"
+                    className="p-4 font-semibold text-gray-700 text-sm whitespace-nowrap"
                   >
                     {flexRender(
                       header.column.columnDef.header,
